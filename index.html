@@ -90,10 +90,10 @@ const disciplinas = [
   ["Avaliação do módulo de cenário mercadológico", "Barbara Poci", 4, 4, 0],
   ["Modelagem esportiva: masculina e feminina", "Barbara Poci", 30, 12, 18],
   ["Software de modelagem I", "Heide Casagrande e Giselly Caldeira", 42, 18, 24],
-  ["MODELAGEM ESPORTIVA: PLUS SIZE", "Danielle Beduschi", 30, 12, 18],
-  ["AVALIAÇÃO DO MÓDULO DE MODA ESPORTIVA", "Barbara Poci", 4, 4, 0],
-  ["MODELAGEM DE MODA PRAIA: PLUS SIZE", "Danielle Beduschi", 20, 8, 12],
-  ["Modelagem de moda praia: masculina e feminina", "Barbara Poci, 42, 18, 24],
+  ["Modelagem esportiva: plus size", "Danielle Beduschi", 30, 12, 18],
+  ["Avaliação do módulo de moda esportiva", "Barbara Poci", 4, 4, 0],
+  ["Modelagem de moda praia: plus size", "Danielle Beduschi", 20, 8, 12],
+  ["Modelagem de moda praia: masculina e feminina", "Barbara Poci", 42, 18, 24],
   ["Software de modelagem II", "Heide Casagrande e Giselly Caldeira", 14, 8, 6],
   ["Modelagem de moda praia: infantil", "Barbara Poci", 20, 8, 12],
   ["Modelagem de moda praia de luxo", "Barbara Poci", 20, 8, 12],
@@ -136,7 +136,7 @@ function gerarCronograma() {
       </tr>
     `;
 
-    // ✅ intervalo de 1 dia entre disciplinas
+    // intervalo de 1 dia entre disciplinas
     dataAtual = new Date(fim);
     dataAtual.setDate(dataAtual.getDate() + 1);
   });
