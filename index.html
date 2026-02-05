@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cronograma Acadêmico • SENAI CETIQT</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  body { font-family: 'Inter', sans-serif; margin: 0; background: #f1f4f8; color: #2c3e50; }
+  header { background: #003366; color: white; padding: 20px; text-align: center; }
+  header h1 { margin: 0; font-weight: 600; letter-spacing: 1px; }
+  header span { font-size: 14px; opacity: 0.8; }
+  .container { max-width: 1100px; margin: 30px auto; padding: 20px; }
+  .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+  label { font-weight: 600; font-size: 14px; }
+  input { width: 100%; padding: 10px; margin: 8px 0 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+  .botoes { display: flex; gap: 10px; flex-wrap: wrap; }
+  button { flex: 1; background: #ff6600; color: white; border: none; padding: 12px; font-weight: 600; border-radius: 6px; cursor: pointer; }
+  button:hover { background: #e65c00; }
+  .btn-limpar { background: #7f8c8d; }
+  .btn-excel { background: #1d6f42; }
+  .btn-excel:hover { background: #155c36; }
+  .btn-voltar { background: #003366; }
+  .btn-voltar:hover { background: #00264d; }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 25px; font-size: 14px; }
+  th { background: #003366; color: white; padding: 12px; }
+  td { padding: 10px; border-bottom: 1px solid #ddd; }
+  tr:nth-child(even) { background: #f9fbfd; }
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>SENAI CETIQT</h1>
+  <span>Moda Praia e Esportiva</span>
+</header>
+
+<div class="container">
+  <div class="card">
+
+    <label>Data de início do curso</label>
+    <input type="date" id="dataInicio">
+
+    <label>Horas de estudo por semana</label>
+    <input type="number" id="horasSemanais" value="8">
+
+    <div class="botoes">
+      <button onclick="gerarCronograma()">Gerar Cronograma</button>
+      <button class="btn-limpar" onclick="limparTabela()">Limpar</button>
+      <button class="btn-excel" onclick="exportarExcel()">Exportar para Excel</button>
+      <button class="btn-voltar" onclick="voltarPagina()">Voltar à Página Inicial</button>
+    </div>
+
+    <table id="tabela">
+      <thead>
+        <tr>
+          <th>Disciplina</th>
+          <th>Professor</th>
+          <th>Carga Horária</th>
+          <th>Período (dias)</th>
+          <th>Início</th>
+          <th>Término</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+  </div>
+</div>
+
+<footer style="text-align:center;margin-top:40px;font-size:13px;color:#555;">
+  Sistema de Planejamento Acadêmico • SENAI CETIQT <br>
+  Desenvolvido por <strong>Matheus Damica Rodrigues Conceição</strong>
+</footer>
+
+<script>
+const disciplinas = [
+  ["Mercado de moda praia e esportiva", "Rosanna Naccarato", 16, 4, 12],
+  ["Economia criativa e modelo de negócios", "Luísa Meirelles", 12, 6, 6],
+  ["Ergonomia e antropometria mundial", "Cristiane Santos", 12, 6, 6],
+  ["Interpretação do desenho técnico", "Diva Costa", 12, 6, 6],
+  ["Ciência e tecnologia dos materiais têxteis", "Fabio Lacerda e Tatiana Laschuk", 12, 6, 6],
+  ["Gestão e qualidade", "Roberta Raposo", 12, 6, 6],
+  ["Exportação: conhecimento de normas técnicas", "Maira Poci", 10, 4, 6],
+  ["Acabamentos em têxteis elásticos", "Barbara Poci", 14, 8, 6],
+  ["Avaliação do módulo de cenário mercadológico", "Barbara Poci", 4, 4, 0],
+  ["Modelagem esportiva: masculina e feminina", "Barbara Poci", 30, 12, 18],
+  ["Software de modelagem I", "Heide Casagrande e Giselly Caldeira", 42, 18, 24],
+  ["MODELAGEM ESPORTIVA: PLUS SIZE", "Danielle Beduschi", 30, 12, 18],
+  ["AVALIAÇÃO DO MÓDULO DE MODA ESPORTIVA", "Barbara Poci", 4, 4, 0],
+  ["MODELAGEM DE MODA PRAIA: PLUS SIZE", "Danielle Beduschi", 20, 8, 12],
+  ["Modelagem de moda praia: masculina e feminina", "Barbara Poci, 42, 18, 24],
+  ["Software de modelagem II", "Heide Casagrande e Giselly Caldeira", 14, 8, 6],
+  ["Modelagem de moda praia: infantil", "Barbara Poci", 20, 8, 12],
+  ["Modelagem de moda praia de luxo", "Barbara Poci", 20, 8, 12],
+  ["Modelagem de moda pós praia", "Marilene Rocha", 16, 8, 8],
+  ["Avaliação do módulo de moda praia", "Barbara Poci", 4, 4, 0],
+];
+
+function formatarData(data) {
+  return data.toLocaleDateString('pt-BR');
+}
+
+function gerarCronograma() {
+  const horasSemanais = parseFloat(document.getElementById("horasSemanais").value);
+  const dataInicioInput = document.getElementById("dataInicio").value;
+
+  if (!dataInicioInput) {
+    alert("Escolha a data de início!");
+    return;
+  }
+
+  let dataAtual = new Date(dataInicioInput);
+  const tbody = document.querySelector("#tabela tbody");
+  tbody.innerHTML = "";
+
+  disciplinas.forEach(disc => {
+    const diasDuracao = Math.ceil((disc[2] / horasSemanais) * 7);
+
+    const inicio = new Date(dataAtual);
+    const fim = new Date(dataAtual);
+    fim.setDate(fim.getDate() + diasDuracao);
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${disc[0]}</td>
+        <td>${disc[1]}</td>
+        <td>${disc[2]}h (Total) • ${disc[3]}h (Síncrona) • ${disc[4]}h (Assíncrona)</td>
+        <td>${diasDuracao} dias</td>
+        <td>${formatarData(inicio)}</td>
+        <td>${formatarData(fim)}</td>
+      </tr>
+    `;
+
+    // ✅ intervalo de 1 dia entre disciplinas
+    dataAtual = new Date(fim);
+    dataAtual.setDate(dataAtual.getDate() + 1);
+  });
+}
+
+function exportarExcel() {
+  const tabela = document.getElementById("tabela").outerHTML;
+  const blob = new Blob(['\ufeff', tabela], { type: 'application/vnd.ms-excel' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "cronograma_curso.xls";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function limparTabela() {
+  document.querySelector("#tabela tbody").innerHTML = "";
+  document.getElementById("dataInicio").value = "";
+}
+
+function voltarPagina() {
+  window.location.href = "https://matheuscetiqt.github.io/Paginainicialcronogramadeaula/";
+}
+</script>
+
+</body>
+</html>
