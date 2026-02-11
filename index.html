@@ -61,6 +61,7 @@
           <th>Disciplina</th>
           <th>Professor</th>
           <th>Carga Horária</th>
+          <th>Carga Horária Paga</th>
           <th>Período (dias)</th>
           <th>Início</th>
           <th>Término</th>
@@ -101,6 +102,12 @@ const disciplinas = [
   ["Avaliação do módulo de moda praia", "Barbara Poci", 4, 4, 0],
 ];
 
+const cargaPaga = [
+  5,8,8,8,8,8,5,10,null,
+  15,23,15,null,
+  10,15,23,10,10,10,null
+];
+
 function formatarData(data) {
   return data.toLocaleDateString('pt-BR');
 }
@@ -118,9 +125,8 @@ function gerarCronograma() {
   const tbody = document.querySelector("#tabela tbody");
   tbody.innerHTML = "";
 
-  disciplinas.forEach(disc => {
+  disciplinas.forEach((disc, i) => {
     const diasDuracao = Math.ceil((disc[2] / horasSemanais) * 7);
-
     const inicio = new Date(dataAtual);
     const fim = new Date(dataAtual);
     fim.setDate(fim.getDate() + diasDuracao);
@@ -130,13 +136,13 @@ function gerarCronograma() {
         <td>${disc[0]}</td>
         <td>${disc[1]}</td>
         <td>${disc[2]}h (Total) • ${disc[3]}h (Síncrona) • ${disc[4]}h (Assíncrona)</td>
+        <td>${cargaPaga[i] != null ? cargaPaga[i] + "h" : "—"}</td>
         <td>${diasDuracao} dias</td>
         <td>${formatarData(inicio)}</td>
         <td>${formatarData(fim)}</td>
       </tr>
     `;
 
-    // intervalo de 1 dia entre disciplinas
     dataAtual = new Date(fim);
     dataAtual.setDate(dataAtual.getDate() + 1);
   });
